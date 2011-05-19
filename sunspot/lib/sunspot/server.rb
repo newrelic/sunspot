@@ -69,6 +69,7 @@ module Sunspot
       command << "-Dsolr.data.dir=#{solr_data_dir}" if solr_data_dir
       command << "-Dsolr.solr.home=#{solr_home}" if solr_home
       command << "-Djava.util.logging.config.file=#{logging_config_path}" if logging_config_path
+      command << "-javaagent:#{newrelic_dir}/newrelic.jar" if newrelic_dir
       command << '-jar' << File.basename(solr_jar)
       FileUtils.cd(File.dirname(solr_jar)) do
         exec(Escape.shell_command(command))
@@ -130,6 +131,10 @@ module Sunspot
 
     def solr_jar
       @solr_jar || SOLR_START_JAR
+    end
+
+    def newrelic_dir
+      File.expand_path(@newrelic_dir || File.join(solr_home, 'newrelic'))
     end
 
     private

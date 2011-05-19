@@ -52,6 +52,13 @@ describe Sunspot::Server do
     @server.run
   end
 
+  it 'runs Solr with specified path to New Relic Java agent' do
+    @server.solr_home = '/var/solr'
+    @server.newrelic_dir.should == '/var/solr/newrelic'
+    @server.should_receive(:exec).with(%r(-javaagent:/var/solr/newrelic/newrelic.jar))
+    @server.run
+  end
+
   describe 'with logging' do
     before :each do
       @server.log_level = 'info'
